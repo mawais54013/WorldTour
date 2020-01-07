@@ -8,12 +8,36 @@ import {
   StyleSheet
 } from 'react-vr';
 
+const places = [
+  {
+    title: 'image1',
+    image: '360image1.jpg'
+  },
+  {
+    title: 'image2',
+    image: '360image2.jpeg'
+  },
+  {
+    title: 'image3',
+    image: '360image3.jpeg'
+  },
+  {
+    title: 'chess-world',
+    image: 'chess-world.jpg'
+  },
+  {
+    title: 'star sky',
+    image: 'starry-sky.jpg'
+  }
+]
+
 class WorldTour extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      showMenu: false
+      showMenu: false,
+      place: 'starry-sky.jpg'
     }
   }
 
@@ -24,16 +48,43 @@ class WorldTour extends React.Component {
   render() {
     return (
       <View>
-        <Pano source={asset('starry-sky.jpg')}/>
+        <Pano source={asset(this.state.place)}/>
         <View style={styles.menuButton} onEnter={() => this.toggleMenu()}>
           <Text style={styles.menuButtonText}>{this.state.showMenu ? 'Close Menu' : 'Open Menu'}</Text>
         </View>
+        {
+          this.state.showMenu ?
+            <View style={styles.menu}>
+              {
+                places.map((place, index) => {
+                  return (
+                    <View style={styles.menuItem} key={index} onEnter={() => this.setState({place: place.image})}>
+                      <Text style={styles.menuItemText}>{place.title}</Text>
+                    </View>
+                  )
+                })
+              }
+            </View>
+          :
+            <View></View>
+        }
       </View>
     );
   }
 };
 
 const styles = StyleSheet.create({
+  menu: {
+    width: 5, 
+    height: 1.25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    transform: [
+      {translate: [-2, 0, -7.5]}
+    ]
+  },
   menuButton: {
     backgroundColor: '#fff',
     borderRadius: 0.25,
@@ -41,6 +92,7 @@ const styles = StyleSheet.create({
     height: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
     borderWidth: 0.01,
     transform: [
       {translate: [-2, 0, -5]}
@@ -49,6 +101,20 @@ const styles = StyleSheet.create({
   menuButtonText: {
     textAlign: 'center',
     fontSize: 0.15,
+    color: '#000'
+  },
+  menuItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 1,
+    height: 1,
+    borderRadius: 0.5,
+    borderWidth: 0.02,
+    backgroundColor: '#fff'
+  },
+  menuItemText: {
+    fontSize: 0.2,
+    textAlign: 'center',
     color: '#000'
   }
 })
